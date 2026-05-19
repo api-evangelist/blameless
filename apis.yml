@@ -24,6 +24,10 @@ apis:
       - type: Documentation
         url: https://docs.blameless.com
 common:
+  - type: GitHubOrganization
+    url: https://github.com/blamelesshq
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/blameless
   - type: Website
     url: https://www.blameless.com
   - type: Documentation
