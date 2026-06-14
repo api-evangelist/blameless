@@ -1,0 +1,811 @@
+# Blameless SRE Conceptual GraphQL Schema
+# Source: https://blameless.com/docs/api/
+# This is a conceptual schema derived from the Blameless REST API and product documentation.
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum SeverityLevel {
+  SEV1
+  SEV2
+  SEV3
+  SEV4
+  SEV5
+}
+
+enum IncidentStatusName {
+  DETECTED
+  INVESTIGATING
+  IDENTIFIED
+  MITIGATING
+  RESOLVED
+  CLOSED
+}
+
+enum ActionStatusValue {
+  OPEN
+  IN_PROGRESS
+  COMPLETE
+  CANCELLED
+}
+
+enum AlertPriorityLevel {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFO
+}
+
+enum BurnRatePeriod {
+  ONE_HOUR
+  SIX_HOURS
+  TWENTY_FOUR_HOURS
+  SEVENTY_TWO_HOURS
+}
+
+enum WebhookEvent {
+  INCIDENT_CREATED
+  INCIDENT_UPDATED
+  INCIDENT_RESOLVED
+  INCIDENT_CLOSED
+  ACTION_CREATED
+  ACTION_COMPLETED
+  RETRO_CREATED
+  RETRO_COMPLETED
+  BURN_ALERT_TRIGGERED
+  SLO_BREACHED
+}
+
+# ─────────────────────────────────────────────
+# Incident Types
+# ─────────────────────────────────────────────
+
+type Incident {
+  id: ID!
+  title: String!
+  description: String
+  details: IncidentDetails
+  status: IncidentStatus!
+  severity: IncidentSeverity!
+  tags: [IncidentTag!]
+  milestones: [IncidentMilestone!]
+  environment: IncidentEnvironment
+  owner: IncidentOwner
+  reporter: IncidentReporter
+  timestamps: IncidentTimestamp!
+  slos: [IncidentSLO!]
+  timeline: Timeline
+  actions: [Action!]
+  retrospective: Retrospective
+  integrationLinks: [String!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type IncidentDetails {
+  incidentId: ID!
+  summary: String
+  customerImpact: String
+  affectedServices: [String!]
+  affectedRegions: [String!]
+  rootCause: String
+  contributingFactors: [String!]
+  metadata: JSON
+}
+
+type IncidentStatus {
+  id: ID!
+  name: IncidentStatusName!
+  label: String!
+  color: String
+  isTerminal: Boolean!
+}
+
+type IncidentSeverity {
+  id: ID!
+  level: SeverityLevel!
+  label: String!
+  description: String
+  color: String
+  responseTimeMinutes: Int
+}
+
+type IncidentTag {
+  id: ID!
+  key: String!
+  value: String!
+}
+
+type IncidentMilestone {
+  id: ID!
+  incidentId: ID!
+  name: String!
+  occurredAt: DateTime!
+  description: String
+  addedBy: User
+}
+
+type IncidentEnvironment {
+  id: ID!
+  name: String!
+  type: String
+  region: String
+  tier: String
+}
+
+type IncidentOwner {
+  incidentId: ID!
+  user: User!
+  assignedAt: DateTime!
+  assignedBy: User
+}
+
+type IncidentReporter {
+  incidentId: ID!
+  user: User
+  source: String
+  reportedAt: DateTime!
+  externalId: String
+}
+
+type IncidentTimestamp {
+  incidentId: ID!
+  detectedAt: DateTime
+  acknowledgedAt: DateTime
+  mitigatedAt: DateTime
+  resolvedAt: DateTime
+  closedAt: DateTime
+  timeToDetect: Int
+  timeToAcknowledge: Int
+  timeToMitigate: Int
+  timeToResolve: Int
+}
+
+type IncidentSLO {
+  incidentId: ID!
+  slo: SLO!
+  impacted: Boolean!
+  budgetConsumed: Float
+}
+
+# ─────────────────────────────────────────────
+# Timeline Types
+# ─────────────────────────────────────────────
+
+type Timeline {
+  id: ID!
+  incidentId: ID!
+  entries: [TimelineEntry!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TimelineEntry {
+  id: ID!
+  timelineId: ID!
+  occurredAt: DateTime!
+  description: String!
+  entryType: String
+  source: String
+  addedBy: User
+  metadata: JSON
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Action Types
+# ─────────────────────────────────────────────
+
+type Action {
+  id: ID!
+  incidentId: ID
+  retroId: ID
+  title: String!
+  description: String
+  status: ActionStatus!
+  owner: ActionOwner
+  dueDate: DateTime
+  priority: Int
+  completedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ActionStatus {
+  id: ID!
+  value: ActionStatusValue!
+  label: String!
+}
+
+type ActionOwner {
+  actionId: ID!
+  user: User!
+  assignedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Retrospective Types
+# ─────────────────────────────────────────────
+
+type Retrospective {
+  id: ID!
+  incidentId: ID!
+  title: String!
+  summary: String
+  sections: [RetroSection!]!
+  items: [RetroItem!]!
+  followUps: [RetroFollowUp!]!
+  completedAt: DateTime
+  publishedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RetroSection {
+  id: ID!
+  retroId: ID!
+  title: String!
+  description: String
+  order: Int!
+  items: [RetroItem!]
+}
+
+type RetroItem {
+  id: ID!
+  retroId: ID!
+  sectionId: ID
+  content: String!
+  itemType: String
+  addedBy: User
+  votes: Int
+  createdAt: DateTime!
+}
+
+type RetroFollowUp {
+  id: ID!
+  retroId: ID!
+  description: String!
+  action: Action
+  assignee: User
+  dueDate: DateTime
+  status: ActionStatusValue!
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# SLO Types
+# ─────────────────────────────────────────────
+
+type SLO {
+  id: ID!
+  name: String!
+  description: String
+  details: SLODetails!
+  target: SLOTarget!
+  budget: SLOBudget!
+  sli: SLI
+  burnAlerts: [BurnAlert!]!
+  tags: [String!]
+  serviceId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SLODetails {
+  sloId: ID!
+  objective: String
+  rationale: String
+  owner: User
+  team: Team
+  services: [String!]
+  reviewPeriod: String
+  metadata: JSON
+}
+
+type SLOTarget {
+  sloId: ID!
+  percentage: Float!
+  window: String!
+  windowDays: Int!
+}
+
+type SLOBudget {
+  sloId: ID!
+  remaining: Float!
+  consumed: Float!
+  errorBudget: ErrorBudget!
+  burnRates: [BudgetBurn!]!
+}
+
+type ErrorBudget {
+  sloId: ID!
+  totalMinutes: Float!
+  minutesConsumed: Float!
+  minutesRemaining: Float!
+  percentage: Float!
+  asOf: DateTime!
+}
+
+type BudgetBurn {
+  id: ID!
+  sloId: ID!
+  period: BurnRatePeriod!
+  burnRate: BurnRate!
+  recordedAt: DateTime!
+}
+
+type BurnRate {
+  value: Float!
+  threshold: Float
+  isAlerting: Boolean!
+}
+
+type BurnAlert {
+  id: ID!
+  sloId: ID!
+  name: String!
+  shortWindow: BurnRatePeriod!
+  longWindow: BurnRatePeriod!
+  threshold: Float!
+  triggered: Boolean!
+  triggeredAt: DateTime
+  notificationChannels: [String!]
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# SLI Types
+# ─────────────────────────────────────────────
+
+type SLI {
+  id: ID!
+  name: String!
+  details: SLIDetails!
+  dataSource: SLIDataSource!
+  currentValue: Float
+  asOf: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SLIDetails {
+  sliId: ID!
+  description: String
+  goodEventQuery: String
+  totalEventQuery: String
+  unit: String
+  methodology: String
+}
+
+type SLIDataSource {
+  id: ID!
+  sliId: ID!
+  provider: String!
+  metricName: String
+  query: String
+  labels: JSON
+  connectionId: String
+}
+
+# ─────────────────────────────────────────────
+# Alert Types
+# ─────────────────────────────────────────────
+
+type Alert {
+  id: ID!
+  title: String!
+  description: String
+  source: AlertSource!
+  priority: AlertPriority!
+  incidentId: ID
+  triggeredAt: DateTime!
+  resolvedAt: DateTime
+  metadata: JSON
+  createdAt: DateTime!
+}
+
+type AlertSource {
+  id: ID!
+  name: String!
+  type: String!
+  externalId: String
+  integrationId: ID
+}
+
+type AlertPriority {
+  level: AlertPriorityLevel!
+  label: String!
+  color: String
+}
+
+# ─────────────────────────────────────────────
+# People Types
+# ─────────────────────────────────────────────
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: String
+  teams: [Team!]
+  timezone: String
+  avatarUrl: String
+  slackHandle: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Team {
+  id: ID!
+  name: String!
+  description: String
+  members: [User!]!
+  schedules: [Schedule!]
+  escalationPolicies: [EscalationPolicy!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# On-Call Types
+# ─────────────────────────────────────────────
+
+type Schedule {
+  id: ID!
+  name: String!
+  teamId: ID!
+  team: Team
+  timezone: String!
+  layers: [JSON!]
+  currentOnCall: [User!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type EscalationPolicy {
+  id: ID!
+  name: String!
+  teamId: ID!
+  team: Team
+  rules: [JSON!]!
+  repeatCount: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Workflow Types
+# ─────────────────────────────────────────────
+
+type WorkflowTemplate {
+  id: ID!
+  name: String!
+  description: String
+  steps: [JSON!]!
+  triggers: [WorkflowTrigger!]!
+  enabled: Boolean!
+  createdBy: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type WorkflowTrigger {
+  id: ID!
+  templateId: ID!
+  eventType: String!
+  conditions: JSON
+  enabled: Boolean!
+}
+
+# ─────────────────────────────────────────────
+# Integration and Access Types
+# ─────────────────────────────────────────────
+
+type Integration {
+  id: ID!
+  name: String!
+  provider: String!
+  type: String!
+  enabled: Boolean!
+  configuration: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Webhook {
+  id: ID!
+  name: String!
+  url: String!
+  events: [WebhookEvent!]!
+  secret: String
+  enabled: Boolean!
+  lastDeliveredAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type APIKey {
+  id: ID!
+  name: String!
+  prefix: String!
+  scopes: [String!]!
+  expiresAt: DateTime
+  lastUsedAt: DateTime
+  createdAt: DateTime!
+}
+
+type Token {
+  id: ID!
+  userId: ID!
+  user: User
+  type: String!
+  expiresAt: DateTime
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Pagination Types
+# ─────────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type IncidentConnection {
+  edges: [IncidentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type IncidentEdge {
+  node: Incident!
+  cursor: String!
+}
+
+type SLOConnection {
+  edges: [SLOEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type SLOEdge {
+  node: SLO!
+  cursor: String!
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input IncidentInput {
+  title: String!
+  description: String
+  severityLevel: SeverityLevel!
+  environmentId: ID
+  ownerId: ID
+  tags: [IncidentTagInput!]
+  sloIds: [ID!]
+  metadata: JSON
+}
+
+input IncidentTagInput {
+  key: String!
+  value: String!
+}
+
+input ActionInput {
+  title: String!
+  description: String
+  incidentId: ID
+  retroId: ID
+  ownerId: ID
+  dueDate: DateTime
+  priority: Int
+}
+
+input RetroItemInput {
+  retroId: ID!
+  sectionId: ID
+  content: String!
+  itemType: String
+}
+
+input SLOInput {
+  name: String!
+  description: String
+  targetPercentage: Float!
+  windowDays: Int!
+  sliId: ID
+  serviceId: String
+  teamId: ID
+  tags: [String!]
+}
+
+input SLIInput {
+  name: String!
+  description: String
+  goodEventQuery: String!
+  totalEventQuery: String!
+  provider: String!
+  metricName: String
+  query: String
+}
+
+input AlertInput {
+  title: String!
+  description: String
+  priorityLevel: AlertPriorityLevel!
+  sourceType: String!
+  sourceExternalId: String
+  integrationId: ID
+  metadata: JSON
+}
+
+input WebhookInput {
+  name: String!
+  url: String!
+  events: [WebhookEvent!]!
+  secret: String
+}
+
+input BurnAlertInput {
+  sloId: ID!
+  name: String!
+  shortWindow: BurnRatePeriod!
+  longWindow: BurnRatePeriod!
+  threshold: Float!
+  notificationChannels: [String!]
+}
+
+# ─────────────────────────────────────────────
+# Root Query
+# ─────────────────────────────────────────────
+
+type Query {
+  # Incidents
+  incident(id: ID!): Incident
+  incidents(
+    first: Int
+    after: String
+    status: IncidentStatusName
+    severity: SeverityLevel
+    ownerId: ID
+    teamId: ID
+    fromDate: DateTime
+    toDate: DateTime
+    tags: [String!]
+  ): IncidentConnection!
+
+  # Timeline
+  timeline(incidentId: ID!): Timeline
+
+  # Actions
+  action(id: ID!): Action
+  actions(incidentId: ID, retroId: ID, status: ActionStatusValue, ownerId: ID): [Action!]!
+
+  # Retrospectives
+  retrospective(id: ID!): Retrospective
+  retrospectives(incidentId: ID, fromDate: DateTime, toDate: DateTime): [Retrospective!]!
+
+  # SLOs
+  slo(id: ID!): SLO
+  slos(
+    first: Int
+    after: String
+    serviceId: String
+    teamId: ID
+    tags: [String!]
+  ): SLOConnection!
+
+  # SLIs
+  sli(id: ID!): SLI
+  slis(provider: String): [SLI!]!
+
+  # Alerts
+  alert(id: ID!): Alert
+  alerts(
+    priority: AlertPriorityLevel
+    incidentId: ID
+    fromDate: DateTime
+    toDate: DateTime
+  ): [Alert!]!
+
+  # People
+  user(id: ID!): User
+  users(teamId: ID): [User!]!
+  team(id: ID!): Team
+  teams: [Team!]!
+
+  # On-Call
+  schedule(id: ID!): Schedule
+  schedules(teamId: ID): [Schedule!]!
+  escalationPolicy(id: ID!): EscalationPolicy
+  escalationPolicies(teamId: ID): [EscalationPolicy!]!
+
+  # Workflows
+  workflowTemplate(id: ID!): WorkflowTemplate
+  workflowTemplates(enabled: Boolean): [WorkflowTemplate!]!
+
+  # Integrations and Access
+  integration(id: ID!): Integration
+  integrations(provider: String, type: String): [Integration!]!
+  webhook(id: ID!): Webhook
+  webhooks: [Webhook!]!
+  apiKeys: [APIKey!]!
+}
+
+# ─────────────────────────────────────────────
+# Root Mutation
+# ─────────────────────────────────────────────
+
+type Mutation {
+  # Incidents
+  createIncident(input: IncidentInput!): Incident!
+  updateIncident(id: ID!, input: IncidentInput!): Incident!
+  resolveIncident(id: ID!, summary: String): Incident!
+  closeIncident(id: ID!): Incident!
+  addIncidentMilestone(incidentId: ID!, name: String!, occurredAt: DateTime!, description: String): IncidentMilestone!
+  addIncidentTag(incidentId: ID!, key: String!, value: String!): IncidentTag!
+  assignIncidentOwner(incidentId: ID!, userId: ID!): IncidentOwner!
+  linkIncidentSLO(incidentId: ID!, sloId: ID!): IncidentSLO!
+
+  # Timeline
+  addTimelineEntry(incidentId: ID!, occurredAt: DateTime!, description: String!, entryType: String): TimelineEntry!
+  updateTimelineEntry(id: ID!, description: String, occurredAt: DateTime): TimelineEntry!
+  deleteTimelineEntry(id: ID!): Boolean!
+
+  # Actions
+  createAction(input: ActionInput!): Action!
+  updateAction(id: ID!, input: ActionInput!): Action!
+  completeAction(id: ID!): Action!
+  deleteAction(id: ID!): Boolean!
+
+  # Retrospectives
+  createRetrospective(incidentId: ID!, title: String!): Retrospective!
+  updateRetrospective(id: ID!, title: String, summary: String): Retrospective!
+  publishRetrospective(id: ID!): Retrospective!
+  addRetroItem(input: RetroItemInput!): RetroItem!
+  addRetroFollowUp(retroId: ID!, description: String!, assigneeId: ID, dueDate: DateTime): RetroFollowUp!
+
+  # SLOs
+  createSLO(input: SLOInput!): SLO!
+  updateSLO(id: ID!, input: SLOInput!): SLO!
+  deleteSLO(id: ID!): Boolean!
+  createBurnAlert(input: BurnAlertInput!): BurnAlert!
+  deleteBurnAlert(id: ID!): Boolean!
+
+  # SLIs
+  createSLI(input: SLIInput!): SLI!
+  updateSLI(id: ID!, input: SLIInput!): SLI!
+  deleteSLI(id: ID!): Boolean!
+
+  # Alerts
+  createAlert(input: AlertInput!): Alert!
+  linkAlertToIncident(alertId: ID!, incidentId: ID!): Alert!
+  resolveAlert(id: ID!): Alert!
+
+  # People
+  createTeam(name: String!, description: String): Team!
+  updateTeam(id: ID!, name: String, description: String): Team!
+  addTeamMember(teamId: ID!, userId: ID!): Team!
+  removeTeamMember(teamId: ID!, userId: ID!): Team!
+
+  # Integrations and Access
+  createWebhook(input: WebhookInput!): Webhook!
+  updateWebhook(id: ID!, input: WebhookInput!): Webhook!
+  deleteWebhook(id: ID!): Boolean!
+  createAPIKey(name: String!, scopes: [String!]!, expiresAt: DateTime): APIKey!
+  revokeAPIKey(id: ID!): Boolean!
+}
