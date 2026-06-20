@@ -3,7 +3,7 @@ name: Blameless
 description: Blameless is an SRE and incident management platform for reliability,
   incident resolution, and blameless retrospectives.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - AIOps
 - SRE
