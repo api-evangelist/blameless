@@ -25,6 +25,8 @@ apis:
   - url: graphql/blameless-graphql.md
     type: GraphQL
 common:
+- type: DomainSecurity
+  url: security/blameless-domain-security.yml
 - type: GitHubOrganization
   url: https://github.com/blamelesshq
 - type: LinkedIn
