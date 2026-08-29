@@ -1,0 +1,69 @@
+generated: '2026-08-29'
+method: probed
+source: https://blamelesshq.auth0.com/.well-known/openid-configuration
+specification: API Commons OAuth Scopes
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+description: >-
+  Scopes advertised by the Blameless Auth0 identity tenant's OIDC discovery document,
+  fetched 2026-08-29. IMPORTANT: these are the tenant's standard OIDC identity scopes, not
+  Blameless API permission scopes. Blameless' API authorization was rule-based
+  (named rules such as IncidentRead), and that rule catalogue was published only on
+  docs.blameless.com, which no longer resolves — so no API scope list can be recovered.
+  Nothing here is derived from an OpenAPI; Blameless never published one.
+issuer: https://blamelesshq.auth0.com/
+authorization_endpoint: https://blamelesshq.auth0.com/authorize
+token_endpoint: https://blamelesshq.auth0.com/oauth/token
+grant_types_supported:
+  - client_credentials
+  - authorization_code
+  - refresh_token
+  - password
+  - implicit
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+code_challenge_methods_supported:
+  - S256
+  - plain
+scopes:
+  - name: openid
+    kind: oidc
+    description: Standard OIDC scope requesting an ID token.
+  - name: profile
+    kind: oidc
+    description: Basic profile claims.
+  - name: offline_access
+    kind: oidc
+    description: Requests a refresh token.
+  - name: email
+    kind: oidc
+  - name: email_verified
+    kind: oidc
+  - name: name
+    kind: oidc
+  - name: given_name
+    kind: oidc
+  - name: family_name
+    kind: oidc
+  - name: nickname
+    kind: oidc
+  - name: picture
+    kind: oidc
+  - name: phone
+    kind: oidc
+  - name: address
+    kind: oidc
+  - name: created_at
+    kind: oidc
+  - name: identities
+    kind: oidc
+api_scopes:
+  count: 0
+  note: >-
+    No Blameless API scope catalogue is recoverable. The API used named access-control
+    rules rather than OAuth scopes, and the page documenting them is gone.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

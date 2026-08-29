@@ -1,0 +1,76 @@
+generated: '2026-08-29'
+method: searched
+source: https://github.com/blamelesshq/blameless-openslo
+specification: API Commons CLI
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+name: Blameless SLO CLI
+status: unmaintained
+description: >-
+  blameless-slo is Blameless' first-party command line tool for managing SLO resources in
+  a Blameless instance from OpenSLO-shaped YAML. It is the only Blameless CLI ever
+  published. Last release 1.0.9 on 2022-09-13; the Blameless tenant hosts it authenticates
+  against no longer resolve, so it is documented here as a historical surface.
+package: '@blamelesshq/blameless-slo'
+repository: https://github.com/blamelesshq/blameless-openslo
+docs: https://github.com/blamelesshq/blameless-openslo/tree/main/docs/blameless-slo-cli
+install:
+  - method: npm
+    command: npm install -g @blamelesshq/blameless-slo
+    source: https://github.com/blamelesshq/blameless-openslo#install-the-cli
+binary: blameless-slo
+commands:
+  - name: validate
+    usage: blameless-slo validate -s <local|github> -f <path_to_yaml>
+    description: >-
+      Validates OpenSLO-shaped YAML specs before deployment. Reports
+      [BLAMELESS] SUCCESS / WARNING / ERROR per spec. Does not call the write API.
+  - name: deploy
+    usage: blameless-slo deploy -s <local|github> -f <path_to_yaml>
+    description: >-
+      Creates or updates SLO resources in Blameless SLO Manager from one YAML file or a
+      directory of them. Refuses to create a resource whose referenced parent (SLI -> Service,
+      SLO -> User Journey) does not already exist in the instance.
+  - name: delete
+    usage: blameless-slo delete
+    description: Removes SLO resources from Blameless SLO Manager.
+sources:
+  - name: local
+    description: Read specs from the local filesystem.
+  - name: github
+    description: Read specs from a GitHub repository, using REPOSITORY_PAT / REPOSITORY_OWNER / REPOSITORY_NAME.
+resource_types:
+  - Service
+  - SLI
+  - SLO
+  - UserJourney
+  - ErrorBudgetPolicy
+configuration:
+  style: environment-variables
+  variables:
+    - name: BLAMELESS_OAUTH_CLIENT_ID
+      description: OAuth2 client id, issued by Blameless Customer Success for the tenant.
+    - name: BLAMELESS_OAUTH_CLIENT_SECRET
+      description: OAuth2 client secret for the tenant.
+    - name: BLAMELESS_OAUTH_AUDIENCE
+      description: OAuth2 audience — the tenant host, <instance_name>.blameless.io.
+    - name: BLAMELESS_TENANT_DOMAIN
+      description: Tenant base URL, e.g. https://example.blameless.io.
+    - name: BLAMELESS_TEMP_AUTH_TOKEN
+      description: >-
+        Access token copied out of the web UI. Documented in the CLI how-to as a
+        workaround for a "known login issue" — an acknowledged gap in the machine
+        credential path.
+    - name: REPOSITORY_PAT
+      description: GitHub personal access token, when reading specs with -s github.
+notes:
+  - >-
+    Credentials were not self-service — the README instructs users to contact Blameless
+    Customer Success (cs@blameless.io) to obtain a client id and secret for their instance.
+  - >-
+    No other first-party CLI was found. The Terraform provider (blamelesshq/blameless)
+    covers settings-as-code and is catalogued in packages/blameless-packages.yml.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

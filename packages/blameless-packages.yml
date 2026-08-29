@@ -1,0 +1,105 @@
+generated: '2026-08-29'
+method: searched
+source: https://registry.npmjs.org/ + https://registry.terraform.io/v1/providers/blamelesshq/blameless + https://proxy.golang.org + https://github.com/blamelesshq
+specification: API Commons Packages
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+description: >-
+  First-party Blameless client packages, published by the blamelesshq organization to
+  the public npm registry and the HashiCorp Terraform Registry. Every version and
+  publication date below was read from the registry metadata endpoint on 2026-08-29.
+  All of them predate FireHydrant's August 2024 acquisition of Blameless or land within
+  months of it; nothing has been republished since 2024-04-19, and the tenant hosts these
+  packages call (<instance>.blameless.io) no longer resolve in DNS. Treat every entry as
+  historical rather than as a live integration path.
+packages:
+  - name: '@blamelesshq/blameless-slo'
+    registry: npm
+    official: true
+    url: https://www.npmjs.com/package/@blamelesshq/blameless-slo
+    source: https://github.com/blamelesshq/blameless-openslo
+    language: javascript
+    kind: cli
+    version: 1.0.9
+    published: '2022-09-13'
+    first_published: '2022-03-23'
+    description: >-
+      Blameless SLO CLI. Validates OpenSLO-shaped YAML (service, SLI, SLO, user journey,
+      error budget policy) and deploys or deletes those resources against a Blameless
+      instance via the Blameless API.
+    install: npm install -g @blamelesshq/blameless-slo
+    note: >-
+      Registry metadata read 2026-08-29 from registry.npmjs.org; latest dist-tag 1.0.9,
+      published 2022-09-13. Nearly four years without a release, and the API it targets
+      is retired.
+  - name: '@blamelesshq/blameless-backstage'
+    registry: npm
+    official: true
+    url: https://www.npmjs.com/package/@blamelesshq/blameless-backstage
+    source: https://github.com/blamelesshq/backstage-plugin
+    language: typescript
+    kind: plugin
+    version: 0.1.30
+    published: '2024-04-11'
+    first_published: '2024-03-05'
+    description: >-
+      Backstage backend plugin that pushes Backstage catalog entities into Blameless.
+      Published by author "Blameless" from the blamelesshq/backstage-plugin repository.
+    install: yarn add @blamelesshq/blameless-backstage
+    note: >-
+      Registry metadata read 2026-08-29 from registry.npmjs.org; latest dist-tag 0.1.30,
+      published 2024-04-11 — four months before the FireHydrant acquisition closed.
+  - name: blamelesshq/blameless
+    registry: terraform
+    official: true
+    url: https://registry.terraform.io/providers/blamelesshq/blameless/latest
+    source: https://github.com/blamelesshq/terraform-provider-blameless
+    language: go
+    kind: terraform-provider
+    version: 0.0.4-rc5
+    published: '2024-04-19'
+    downloads: 10523
+    tier: community
+    description: >-
+      Terraform provider exposing Blameless settings as resources — blameless_organization,
+      blameless_incident_severities, blameless_incident_roles, blameless_incident_type.
+      Configured with an `instance` (tenant URL) and a `key` (API key), or the
+      BLAMELESS_INSTANCE / BLAMELESS_KEY environment variables.
+    note: >-
+      Registry metadata read 2026-08-29 from registry.terraform.io/v1; 11 published
+      versions, all pre-1.0, latest 0.0.4-rc5 on 2024-04-19. Never left release-candidate
+      status. The repository itself was last pushed 2025-11-20 but nothing newer was cut
+      to the registry.
+  - name: github.com/blamelesshq/terraform-provider-blameless
+    registry: go
+    official: true
+    url: https://pkg.go.dev/github.com/blamelesshq/terraform-provider-blameless
+    source: https://github.com/blamelesshq/terraform-provider-blameless
+    language: go
+    kind: module
+    version: v0.0.1
+    published: '2023-10-03'
+    note: >-
+      Read from proxy.golang.org/@latest on 2026-08-29 — the Go module proxy only ever saw
+      the v0.0.1 tag; the later 0.0.4-rc* builds were released through the Terraform
+      Registry, not as Go module tags.
+not_published:
+  - registry: pypi
+    note: No first-party Blameless package found; blamelesshq/python-server-sdk is an archived fork of the LaunchDarkly Python server SDK, not a Blameless client.
+  - registry: maven
+    note: No first-party package found.
+  - registry: nuget
+    note: No first-party package found.
+  - registry: rubygems
+    note: No first-party package found.
+  - registry: crates
+    note: No first-party package found.
+related_repositories:
+  - url: https://github.com/blamelesshq/blameless-api-samples
+    note: Documented Go and Node.js examples of calling the Blameless API (POST /api/v1/services/<Service>/<Method>). Sample code, not a distributed package.
+  - url: https://github.com/blamelesshq/proxy-function
+    note: Terraform/Function deployment for a Prometheus metrics proxy the customer runs in their own AWS/Azure account.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

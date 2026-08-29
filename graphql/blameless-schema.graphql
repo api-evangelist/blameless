@@ -1,3 +1,9 @@
+# NOT A BLAMELESS CONTRACT — conceptual model only.
+# Reviewed 2026-08-29: Blameless never published a GraphQL API, and this SDL was never
+# served by the company. It was authored by an earlier API Evangelist pass from product
+# documentation. Do not register it as a provider contract. See graphql/blameless-graphql.md
+# and lifecycle/blameless-lifecycle.yml.
+
 # Blameless SRE Conceptual GraphQL Schema
 # Source: https://blameless.com/docs/api/
 # This is a conceptual schema derived from the Blameless REST API and product documentation.

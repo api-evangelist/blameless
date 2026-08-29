@@ -1,0 +1,102 @@
+generated: '2026-08-29'
+method: searched
+source: https://blamelesshq.auth0.com/.well-known/openid-configuration + https://github.com/blamelesshq/blameless-openslo + live probes of blameless.com hosts
+specification: API Commons Conformance
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+description: >-
+  Standards conformance for Blameless, asserted only where a fetched artifact carries the
+  signature. Blameless published no OpenAPI and its documentation host is gone, so the
+  evidence base is its live Auth0 identity tenant and its own open-source client
+  repositories.
+standards:
+  - id: oauth2
+    name: OAuth 2.0 (RFC 6749) — client credentials
+    conforms: true
+    evidence:
+      - >-
+        https://blamelesshq.auth0.com/.well-known/openid-configuration lists
+        client_credentials in grant_types_supported and exposes
+        https://blamelesshq.auth0.com/oauth/token (HTTP 200, 2026-08-29).
+      - >-
+        blamelesshq/blameless-openslo src/lib/config/env.js sets grandType "client_credentials"
+        with clientId / clientSecret / audience against that token endpoint.
+  - id: oidc
+    name: OpenID Connect Discovery 1.0
+    conforms: true
+    evidence:
+      - >-
+        /.well-known/openid-configuration returns a complete discovery document — issuer
+        https://blamelesshq.auth0.com/, jwks_uri, userinfo_endpoint, RS256 among
+        id_token_signing_alg_values_supported (HTTP 200, 2026-08-29).
+  - id: rfc8414
+    name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+    conforms: true
+    evidence:
+      - >-
+        /.well-known/oauth-authorization-server returns HTTP 200 with a document byte-identical
+        to the OIDC discovery document.
+  - id: pkce
+    name: PKCE (RFC 7636)
+    conforms: true
+    evidence:
+      - code_challenge_methods_supported = [S256, plain] in the discovery document.
+  - id: openslo
+    name: OpenSLO
+    conforms: false
+    partial: true
+    domain_standard: true
+    market: SRE / service level management
+    evidence:
+      - >-
+        blamelesshq/blameless-openslo ships specs/{service,sli,slo,user_journey,error_budget_policy}.yaml
+        and a CLI (@blamelesshq/blameless-slo) that validates and deploys them, adopting OpenSLO's
+        object model — Service / SLI / SLO / UserJourney / ErrorBudgetPolicy, ratioMetric with
+        good+total sources, thresholdMetric with op and value.
+      - >-
+        Every one of those spec files declares `apiVersion: blameless/v1alpha`, not an
+        `openslo/*` apiVersion. The dialect is OpenSLO-shaped but vendor-namespaced, so a
+        file written for the Blameless SLO CLI is not portable to an OpenSLO-conformant tool
+        without rewriting apiVersion, and vice versa.
+    note: >-
+      Recorded as partial rather than conformant. This is the closest Blameless came to a
+      domain standard for its market, and the gap is one field wide.
+  - id: rfc9116
+    name: security.txt (RFC 9116)
+    conforms: false
+    evidence:
+      - https://www.blameless.com/.well-known/security.txt returns 302 to firehydrant.com (2026-08-29).
+      - https://blamelesshq.auth0.com/.well-known/security.txt returns 404 (2026-08-29).
+  - id: rfc8594
+    name: Sunset header / deprecation signalling (RFC 8594)
+    conforms: false
+    evidence:
+      - >-
+        No deprecation or sunset policy was published on any surviving Blameless host, and the
+        API was retired without a dated notice — see lifecycle/blameless-lifecycle.yml.
+  - id: openapi
+    name: OpenAPI
+    conforms: false
+    evidence:
+      - >-
+        No OpenAPI/Swagger document was ever served from a blameless.com or blameless.io host.
+        A Wayback CDX query over *.blameless.com filtered to openapi|swagger returns zero
+        captures (2026-08-29).
+  - id: rfc9457
+    name: Problem Details for HTTP APIs (RFC 9457)
+    conforms: false
+    evidence:
+      - >-
+        Blameless' own Node client logs errors from response.data.error and response.data.message,
+        a bespoke JSON envelope rather than application/problem+json
+        (blamelesshq/blameless-openslo src/blameless-delete/handlers/shared/apiCall.js).
+certifications:
+  count: 0
+  note: >-
+    No trust center, SOC 2, ISO 27001 or other certification page is reachable on any Blameless
+    host; probe-security-programs.py returned vdp=none, trust=none on 2026-08-29. No Compliance
+    pointer is emitted. Any Blameless compliance posture now lives under FireHydrant.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

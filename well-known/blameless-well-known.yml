@@ -1,0 +1,89 @@
+generated: '2026-08-29'
+method: probed
+source: live HTTP probes of every host named in apis.yml, 2026-08-29
+description: >-
+  Well-known probe for Blameless. The company's own web and tenant hosts serve nothing:
+  www.blameless.com answers every path — well-known or not — with a 302 to
+  https://firehydrant.com/ (Blameless was acquired by FireHydrant in August 2024), and
+  docs.blameless.com and the *.blameless.io tenant domain no longer exist in DNS. One
+  Blameless-controlled host is still serving a real document: the company's Auth0 identity
+  tenant, blamelesshq.auth0.com — named as the machine-to-machine token endpoint in
+  Blameless' own SLO CLI source — returns a full OIDC discovery document at both
+  /.well-known/openid-configuration and /.well-known/oauth-authorization-server. Those two
+  200s are the basis for the WellKnown pointer; no security.txt is served anywhere, so no
+  SecurityTxt pointer is emitted.
+hosts:
+  - host: www.blameless.com
+    note: All paths blanket-redirect (302) to https://firehydrant.com/ — the acquirer's site. No document is served.
+    documents:
+      - path: /.well-known/security.txt
+        status: 302
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 302
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 302
+        file: null
+      - path: /.well-known/api-catalog
+        status: 302
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 302
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 302
+        file: null
+      - path: /.well-known/agent.json
+        status: 302
+        file: null
+      - path: /llms.txt
+        status: 302
+        file: null
+      - path: /openapi.json
+        status: 302
+        file: null
+      - path: /robots.txt
+        status: 302
+        file: null
+  - host: blamelesshq.auth0.com
+    note: >-
+      Blameless' Auth0 identity tenant, still live. Attested as first-party by
+      blamelesshq/blameless-openslo src/lib/config/env.js, which sets
+      m2m = https://blamelesshq.auth0.com/oauth/token. Both discovery paths return the
+      identical document (issuer https://blamelesshq.auth0.com/, client_credentials among
+      grant_types_supported).
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: blameless-openid-configuration.json
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: blameless-oauth-authorization-server.json
+      - path: /.well-known/jwks.json
+        status: 200
+        file: null
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+  - host: docs.blameless.com
+    note: NXDOMAIN — no A record from 8.8.8.8 or 1.1.1.1 on 2026-08-29. The documentation site is gone; only search-engine memory of docs.blameless.com/api/api-reference/* remains.
+    documents:
+      - path: /.well-known/security.txt
+        status: 0
+        file: null
+      - path: /llms.txt
+        status: 0
+        file: null
+  - host: api.blameless.io
+    note: NXDOMAIN. The blameless.io tenant domain used by the API, CLI and Terraform provider no longer resolves.
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 0
+        file: null
+      - path: /openapi.json
+        status: 0
+        file: null
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

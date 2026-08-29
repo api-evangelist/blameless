@@ -1,0 +1,97 @@
+generated: '2026-08-29'
+method: searched
+source: https://firehydrant.com/blog/press-release-firehydrant-acquires-blameless-to-further-solidify-enterprise/ + live probes of blameless.com / docs.blameless.com / *.blameless.io
+specification: API Commons Lifecycle
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+status: retired
+summary: >-
+  Blameless was acquired by FireHydrant on 2024-08-21 and has since been fully absorbed.
+  As of 2026-08-29 the Blameless API surface is gone: www.blameless.com blanket-redirects
+  to firehydrant.com, docs.blameless.com has no DNS record, and the *.blameless.io tenant
+  hosts the API, CLI and Terraform provider authenticated against no longer resolve. The
+  only Blameless surfaces still reachable are the GitHub organization and two npm packages
+  plus one Terraform Registry provider, none republished since April 2024.
+acquisition:
+  acquirer: FireHydrant
+  acquirer_provider: https://apis.io/providers/firehydrant/
+  announced: '2024-08-21'
+  press_release: https://firehydrant.com/blog/press-release-firehydrant-acquires-blameless-to-further-solidify-enterprise/
+  coverage: https://techcrunch.com/2024/08/21/two-incident-management-startups-join-forces-as-firehydrant-nabs-blameless/
+  terms: undisclosed
+  note: >-
+    Blameless board members Vas Natarajan (Accel) and Dan Moskowitz (Third Point Ventures)
+    joined the FireHydrant board as part of the transaction. Enterprise Blameless customers
+    named in coverage include CrowdStrike, Palo Alto Networks, VMware and Ticketmaster.
+end_of_life:
+  product: retired
+  api: retired
+  documentation: removed
+  effective_observed: '2026-08-29'
+  note: >-
+    No dated sunset notice, deprecation policy, Sunset/Deprecation header policy (RFC 8594)
+    or migration guide was ever published on a Blameless host that survives. The wind-down
+    is recorded here from the state of the hosts themselves, not from a provider statement.
+host_evidence:
+  - url: https://www.blameless.com/
+    status: 302
+    location: https://firehydrant.com/
+    checked: '2026-08-29'
+  - url: https://www.blameless.com/pricing
+    status: 302
+    location: https://firehydrant.com/pricing
+    checked: '2026-08-29'
+  - url: https://docs.blameless.com/api/api-reference/get-incident/
+    status: 0
+    note: NXDOMAIN — docs.blameless.com does not resolve (8.8.8.8 and 1.1.1.1, 2026-08-29).
+    checked: '2026-08-29'
+  - url: https://api.blameless.io/
+    status: 0
+    note: NXDOMAIN — the blameless.io tenant domain does not resolve.
+    checked: '2026-08-29'
+  - url: https://github.com/blamelesshq
+    status: 200
+    note: Organization still public — 10 repositories, 4 of them archived; org record last updated 2025-09-21.
+    checked: '2026-08-29'
+historical_api:
+  style: REST + RPC-over-HTTP
+  versioning: path
+  version: v1
+  base_url_pattern: https://{instance}.blameless.io/api/v1
+  base_url_status: unresolvable
+  note: >-
+    The base URL was tenant-templated: each customer called their own instance host. Two
+    shapes are attested in first-party code and in the (now-removed) reference —
+    resource-style paths such as /api/v1/incidents and /api/v1/incidents/{incidentId}/events,
+    and an RPC-style /api/v1/services/{Service}/{Method} used by the SLO client
+    (SLOServiceCrud, SLOTimeSeriesServiceCrud). No baseURL is written into apis.yml because
+    no instance host resolves; recording one would assert a callable host that does not exist.
+  evidence:
+    - https://github.com/blamelesshq/blameless-api-samples/blob/main/go/slo/packages/clients/blameless.go
+    - https://github.com/blamelesshq/terraform-provider-blameless/blob/main/docs/index.md
+machine_readable_contract:
+  openapi: none
+  asyncapi: none
+  graphql: none
+  note: >-
+    No OpenAPI, Swagger, AsyncAPI or GraphQL SDL was ever published on a Blameless host. A
+    Wayback CDX query over *.blameless.com filtered to openapi|swagger returns zero
+    captures (checked 2026-08-29). The one OpenAPI 3.0.1 document in the GitHub org
+    (blamelesshq/proxy-function deploy/azure/api-spec.yml) is an Azure Function App import
+    descriptor for a customer-deployed Prometheus proxy — four undocumented GET stubs on a
+    per-deployment azurewebsites.net host — and is deliberately NOT catalogued as the
+    Blameless API contract.
+status_page:
+  published: false
+  note: status.blameless.com does not resolve (NXDOMAIN, 2026-08-29); no status page pointer is emitted.
+support:
+  note: Customer Success contact cs@blameless.io was the documented route to API credentials; the mailbox is presumed to have moved to FireHydrant.
+successor:
+  provider: FireHydrant
+  url: https://firehydrant.com/
+  api_docs: https://docs.firehydrant.com/
+  note: Integrators should treat firehydrant.com as the live successor surface.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

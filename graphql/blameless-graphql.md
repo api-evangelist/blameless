@@ -1,5 +1,15 @@
 # Blameless SRE GraphQL Schema
 
+> **NOT A BLAMELESS CONTRACT — DO NOT WIRE THIS AS ONE.**
+> Reviewed 2026-08-29. Blameless never published a GraphQL API. The schema in this folder
+> is a *conceptual model* an earlier API Evangelist pass authored from product
+> documentation; it was never served by Blameless, and it is not derived from any spec the
+> company published. The `type: GraphQL` pointer that used to reference this file has been
+> removed from `apis.yml` because it asserted a contract that does not exist. Blameless'
+> real (now retired) API was REST/RPC over `https://{instance}.blameless.io/api/v1` — see
+> `lifecycle/blameless-lifecycle.yml`. Keep this file as a domain sketch only.
+
+
 ## Overview
 
 Blameless is an SRE and incident management platform purpose-built for reliability engineering teams. It covers the full incident lifecycle — detection, response, retrospectives, and continuous improvement through SLOs and error budgets. This conceptual GraphQL schema models the Blameless platform domain as described in the Blameless public documentation at https://docs.blameless.com.

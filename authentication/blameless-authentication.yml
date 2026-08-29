@@ -1,0 +1,91 @@
+generated: '2026-08-29'
+method: probed
+source: https://blamelesshq.auth0.com/.well-known/openid-configuration (200, 2026-08-29) + https://github.com/blamelesshq/blameless-openslo/blob/main/src/lib/config/env.js + https://github.com/blamelesshq/terraform-provider-blameless/blob/main/docs/index.md
+specification: API Commons Authentication
+specificationVersion: '0.1'
+provider: Blameless
+providerId: blameless
+status: historical
+description: >-
+  Authentication profile for the Blameless API, reconstructed from Blameless' own published
+  client code and from its still-live Auth0 identity tenant. Blameless published no OpenAPI,
+  and its documentation host (docs.blameless.com) no longer resolves, so nothing here is
+  derived from a spec — every scheme below is grounded in a fetched first-party artifact.
+  The API itself is retired: the tenant hosts these credentials were presented to
+  (<instance>.blameless.io) no longer exist in DNS.
+schemes:
+  - id: oauth2_client_credentials
+    type: oauth2
+    flow: clientCredentials
+    label: Auth0 machine-to-machine client credentials
+    token_endpoint: https://blamelesshq.auth0.com/oauth/token
+    issuer: https://blamelesshq.auth0.com/
+    jwks_uri: https://blamelesshq.auth0.com/.well-known/jwks.json
+    grant_type: client_credentials
+    audience: <instance_name>.blameless.io
+    token_endpoint_auth_methods:
+      - client_secret_basic
+      - client_secret_post
+      - private_key_jwt
+      - none
+    parameters:
+      - name: BLAMELESS_OAUTH_CLIENT_ID
+      - name: BLAMELESS_OAUTH_CLIENT_SECRET
+      - name: BLAMELESS_OAUTH_AUDIENCE
+    credential_issuance: manual
+    credential_issuance_note: >-
+      Not self-service. The SLO CLI README instructs users to contact Blameless Customer
+      Success (cs@blameless.io) to be issued a client id and secret bound to their instance.
+    evidence:
+      - https://github.com/blamelesshq/blameless-openslo/blob/main/src/lib/config/env.js
+      - https://github.com/blamelesshq/blameless-openslo#initial-setup
+      - https://blamelesshq.auth0.com/.well-known/openid-configuration
+  - id: bearer_token
+    type: http
+    scheme: bearer
+    label: Bearer access token on the tenant API
+    header: 'Authorization: Bearer <token>'
+    description: >-
+      Every call to the tenant API carried the Auth0 access token as an Authorization
+      bearer header. Blameless' Go sample client sets the auth scheme to Bearer explicitly;
+      the Node client sets the Authorization header in an axios request interceptor and
+      retries once on 401.
+    evidence:
+      - https://github.com/blamelesshq/blameless-api-samples/blob/main/go/slo/packages/clients/blameless.go
+      - https://github.com/blamelesshq/blameless-openslo/blob/main/src/blameless-delete/handlers/shared/apiCall.js
+  - id: api_key
+    type: apiKey
+    in: header
+    label: Blameless API key (Terraform provider)
+    description: >-
+      The Terraform provider authenticates with an instance URL plus an API key, sourced
+      from BLAMELESS_INSTANCE and BLAMELESS_KEY. The provider documentation does not state
+      which header carries the key, and the provider source is the only reference.
+    parameters:
+      - name: BLAMELESS_INSTANCE
+      - name: BLAMELESS_KEY
+    evidence:
+      - https://github.com/blamelesshq/terraform-provider-blameless/blob/main/docs/index.md
+authorization:
+  model: rule-based
+  note: >-
+    The removed reference documented an "API Access Control" model in which each operation
+    required a named rule — GET /api/v1/incidents required IncidentRead. Recorded at low
+    confidence: the page (docs.blameless.com/features/api-access-control/) is only present
+    in search-engine memory and returns nothing today, since the host has no DNS record.
+  confidence: low
+  evidence:
+    - url: https://docs.blameless.com/features/api-access-control/
+      status: 0
+      note: NXDOMAIN 2026-08-29.
+gaps:
+  - >-
+    A documented workaround in the CLI how-to told users to copy an access_token out of the
+    web UI into BLAMELESS_TEMP_AUTH_TOKEN because of a "known login issue" — a
+    provider-acknowledged break in the machine credential path.
+  - >-
+    No refresh-token handling: the Node client's 401 interceptor contains a TODO noting the
+    token-refresh API did not exist yet.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
