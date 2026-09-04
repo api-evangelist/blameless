@@ -34,6 +34,7 @@ accessModel:
   source:
   - plans
   - lifecycle
+  - {url: 'https://www.blameless.com', status: 302, note: 'declared website redirects to https://firehydrant.com/ — a different registrable domain (blameless.com -> firehydrant.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
   generated: '2026-08-29'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/blameless.png
