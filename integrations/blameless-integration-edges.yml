@@ -2,12 +2,7 @@ generated: '2026-10-14'
 method: searched
 checked:
 - https://api.nuget.org/v3
-- https://cdn.winget.microsoft.com/cache
 - https://crates.io/api/v1
-- https://formulae.brew.sh/api/cask.json
-- https://formulae.brew.sh/api/formula.json
-- https://github.com/ScoopInstaller/Extras
-- https://github.com/ScoopInstaller/Main
 - https://proxy.golang.org
 - https://pypi.org/pypi
 - https://registry.npmjs.org
@@ -15,54 +10,16 @@ checked:
 - https://rubygems.org/api/v1
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
 - okta/integrations/okta-integration-edges.yml
+- https://cdn.winget.microsoft.com/cache
+- https://formulae.brew.sh/api/cask.json
+- https://formulae.brew.sh/api/formula.json
+- https://github.com/ScoopInstaller/Extras
+- https://github.com/ScoopInstaller/Main
+- opentofu/integrations/opentofu-integration-edges.yml
+- terraform/integrations/terraform-integration-edges.yml
 source:
 - okta/integrations/okta-integration-edges.yml
 edges:
-- partner_name: Okta (own)
-  partner: okta
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.okta.com/integrations/blameless/
-  mirror_of: okta/integrations/okta-integration-edges.yml
-  apps:
-  - Blameless
-  listing_count: 1
-  detected: '2026-10-14'
-  detected_by: mirror-platform-listings.py
-  category: Single Sign-On
-  badges:
-  - OKTA_VERIFIED
-  features:
-  - CREATE
-  - DEACTIVATE
-  - GROUP_LINKING
-  - GROUP_PUSH
-  - SAML
-  - UPDATE
-- partner_name: Microsoft Teams (own)
-  partner: microsoft-teams
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://appsource.microsoft.com/en-us/product/office/WA200003533
-  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
-  apps:
-  - Blameless
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Microsoft Teams app
-  publisher_verified:
-  - Microsoft 365 Certified
 - partner_name: Go module proxy
   partner: null
   partner_match: null
@@ -162,3 +119,86 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-official-clis.py
   first_seen: '2026-10-20'
+- partner_name: Okta (own)
+  partner: okta
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.okta.com/integrations/blameless/
+  mirror_of: okta/integrations/okta-integration-edges.yml
+  apps:
+  - Blameless
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Single Sign-On
+  badges:
+  - OKTA_VERIFIED
+  features:
+  - CREATE
+  - DEACTIVATE
+  - GROUP_LINKING
+  - GROUP_PUSH
+  - SAML
+  - UPDATE
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200003533
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - Blameless
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Certified
+- partner_name: OpenTofu (opentofu-registry)
+  partner: opentofu
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: opentofu-registry
+  evidence: https://search.opentofu.org/provider/blamelesshq/blameless
+  mirror_of: opentofu/integrations/opentofu-integration-edges.yml
+  apps:
+  - blamelesshq/blameless
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: infrastructure-as-code provider registry listing
+  badges:
+  - Verified publisher (GitHub domain-verified organization)
+- partner_name: Terraform (terraform-registry)
+  partner: terraform
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: terraform-registry
+  evidence: https://registry.terraform.io/providers/blamelesshq/blameless
+  mirror_of: terraform/integrations/terraform-integration-edges.yml
+  apps:
+  - blamelesshq/blameless
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: infrastructure-as-code provider registry listing
+  badges:
+  - Verified publisher (GitHub domain-verified organization)
