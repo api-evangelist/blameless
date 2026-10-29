@@ -1,4 +1,4 @@
-# Blameless (blameless)
+# Blameless
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,49 +64,115 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Blameless is an SRE and incident management platform for reliability, incident resolution, and blameless retrospectives.
+Blameless was an SRE and incident management platform for reliability engineering teams, covering the full incident lifecycle — detection and response, on-call and severity workflows, blameless retrospectives, and SLOs with error budgets. It sold to enterprise reliability organizations including CrowdStrike, Palo Alto Networks, VMware and Ticketmaster. FireHydrant acquired Blameless on 2024-08-21 and has since absorbed the product; as of 2026-08-29 blameless.com redirects to firehydrant.com, docs.blameless.com and the *.blameless.io tenant hosts no longer resolve, and the tenant-templated REST/RPC API at https://{instance}.blameless.io/api/v1 is retired. What survives is the public blamelesshq GitHub organization, two npm packages, a Terraform Registry provider, and a live Auth0 identity tenant.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/blameless/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/blameless/refs/heads/main/apis.yml)
+**Areas:** AIOps · SRE · Incident Management · Reliability · SLO · Retrospectives · On-Call · DevOps
 
-## Scope
+## Blameless on APIs.io
 
-- **Type:** Index
+Everything profiled for Blameless is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/blameless/](https://apis.io/providers/blameless/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (1)
 
-- AIOps
-- SRE
+- [Blameless](https://apis.io/apis/blameless/blameless/) — The Blameless platform API — incidents, incident types, severities, roles, SLOs, SLIs and error budgets — served per tenant at…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-27
-- **Modified:** 2026-03-27
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### GraphQL (1)
 
-### Blameless
+GraphQL schemas.
 
-Blameless is an SRE and incident management platform for reliability, incident resolution, and blameless retrospectives.
+- [Moved to /providers/blameless/](https://apis.io/graphqls/blameless/blameless-graphql/)
 
-- **Human URL:** [https://www.blameless.com](https://www.blameless.com)
+#### Security (2)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- AIOps
+- [Blameless Authentication](https://apis.io/security/blameless/blameless-authentication/)
+- [Blameless Domain Security](https://apis.io/security/blameless/blameless-domain-security/)
 
-#### Properties
+#### OAuth scopes (1)
 
-- [Documentation](https://docs.blameless.com)
-- [Graph Q L](graphql/blameless-graphql.md)
+The permissions the API asks for.
 
-## Common Properties
+- [Blameless Scopes](https://apis.io/scopes/blameless/blameless-scopes/)
 
-- [GitHub Organization](https://github.com/blamelesshq)
-- [LinkedIn](https://www.linkedin.com/company/blameless)
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Blameless Plans Pricing](https://apis.io/plans/blameless/blameless-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Blameless Rate Limits](https://apis.io/rate-limits/blameless/blameless-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Blameless Finops](https://apis.io/finops/blameless/blameless-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.blameless.com)
-- [Documentation](https://docs.blameless.com)
+- [GitHub](https://github.com/blamelesshq)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 13.7** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 19.0 |
+| Access clarity | 0.0 |
+
+**Agent readiness 17.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+
+**Regulatory alignment 26.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/blameless/](https://apis.io/providers/blameless/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Blameless: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/blameless/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
